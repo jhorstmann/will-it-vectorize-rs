@@ -27,6 +27,41 @@ on single elements into code that uses simd instructions to process multiple ele
 at the same time. This can often improve the performance by a factor equal to the number
 of vector lanes.
 
+Whether this transform worked can be verified by inspecting the resulting assembly code.
+A useful tool for showing the assembly code for a function is
+[`cargo-show-asm`](https://crates.io/crates/cargo-show-asm).
+
+For example to show the assembly of the first example in this crate:
+
+```shell
+$ cargo +nightly asm --native --lib arithmetic_add
+
+will_it_vectorize::arithmetic::arithmetic_add:
+
+	.cfi_startproc
+	vmovups ymm0, ymmword ptr [rdi]
+	vaddps ymm0, ymm0, ymmword ptr [rsi]
+	vmovups ymmword ptr [rdx], ymm0
+
+	vmovups ymm0, ymmword ptr [rdi + 32]
+	vaddps ymm0, ymm0, ymmword ptr [rsi + 32]
+	vmovups ymmword ptr [rdx + 32], ymm0
+
+	vmovups ymm0, ymmword ptr [rdi + 64]
+	vaddps ymm0, ymm0, ymmword ptr [rsi + 64]
+	vmovups ymmword ptr [rdx + 64], ymm0
+
+	vmovups ymm0, ymmword ptr [rdi + 96]
+	vaddps ymm0, ymm0, ymmword ptr [rsi + 96]
+	vmovups ymmword ptr [rdx + 96], ymm0
+
+	vzeroupper
+	ret
+```
+
+We can see 4 occurrences of the `vaddps` instruction, which operates
+on avx `ymm` registers, which contain 8 f32 elements each.
+
 ## Instruction sets
 
 ### x86_64
