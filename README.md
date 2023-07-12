@@ -35,7 +35,8 @@ For example to show the assembly of the first example in this crate:
 
 ```shell
 $ cargo +nightly asm --native --lib arithmetic_add
-
+```
+```asm
 will_it_vectorize::arithmetic::arithmetic_add:
 
 	.cfi_startproc
