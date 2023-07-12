@@ -6,6 +6,16 @@ pub fn rgba_to_b_loop(rgba: &[[u8; 4]; 16], output: &mut [u8; 16]) {
         })
 }
 
+pub fn rgba_to_b_local(rgba: &[[u8; 4]; 16], output: &mut [u8; 16]) {
+    let mut tmp = [0_u8; 16];
+    rgba.iter()
+        .zip(tmp.iter_mut())
+        .for_each(|([_r, _g, b, _a], out)| {
+            *out = *b;
+        });
+    *output = tmp;
+}
+
 /// # Safety
 /// Requires avx512 support
 #[target_feature(enable = "avx512f,avx512vl")]

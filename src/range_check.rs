@@ -3,7 +3,7 @@ pub fn check_range_all(keys: &[u32], max: u32) -> bool {
 }
 
 pub fn check_range_copied_all(keys: &[u32], max: u32) -> bool {
-    keys.iter().all(|x| *x < max)
+    keys.iter().copied().all(|x| x < max)
 }
 
 #[allow(clippy::unnecessary_fold)]

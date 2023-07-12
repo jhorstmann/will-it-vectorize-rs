@@ -34,7 +34,7 @@ fn ymd_to_epoch_days(year: i32, month: i32, day: i32) -> i32 {
     total - DAYS_0000_TO_1970
 }
 
-pub fn to_epoch_days(ymd: &[(i32, i32, i32); 16], epoch_days: &mut [i32; 16]) {
+pub fn to_epoch_days(ymd: &[(i32, i32, i32); 8], epoch_days: &mut [i32; 8]) {
     // assert!(ymd.len() == epoch_days.len());
 
     epoch_days
